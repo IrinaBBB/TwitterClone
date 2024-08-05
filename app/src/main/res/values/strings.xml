@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">TwitterClone</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="twitter_logo">Twitter Logo</string>
 </resources>
