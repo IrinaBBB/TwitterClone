@@ -13,9 +13,14 @@
         android:theme="@style/Theme.TwitterClone"
         tools:targetApi="31">
         <activity
-            android:theme="@style/Base.Theme.TwitterClone.ActionBar"
-            android:name=".HomeActivity"
+            android:name=".SignupActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
+        <activity
+            android:name=".HomeActivity"
+            android:exported="false"
+            android:theme="@style/Base.Theme.TwitterClone.ActionBar" />
         <activity
             android:name=".LoginActivity"
             android:exported="true"

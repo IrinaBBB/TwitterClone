@@ -28,7 +28,7 @@ class LoginActivity : AppCompatActivity() {
         setTextOnChangeListener(binding.etEmail, binding.tilEmail)
         setTextOnChangeListener(binding.etPassword, binding.tilPassword)
         
-        binding.progressBar.setOnTouchListener { v, event ->  true}
+        //binding.progressBar.setOnTouchListener { v, event ->  true}
     }
 
     private fun setTextOnChangeListener(et: EditText, til: TextInputLayout) {
@@ -92,7 +92,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     fun goToSignUp(v: View) {
-
+        startActivity(SignupActivity.newIntent(this))
     }
 
     companion object {
