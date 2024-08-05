@@ -6,78 +6,94 @@
     android:background="@drawable/gradient_background"
     tools:context=".LoginActivity">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Logo Image -->
-        <ImageView
-            android:id="@+id/ivLogo"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="32dp"
-            android:src="@drawable/title"
-            android:contentDescription="@string/twitter_logo"
-            android:scaleType="centerInside" />
-
-        <!-- Username EditText -->
-        <EditText
-            android:id="@+id/etUsername"
+        <LinearLayout
+            android:id="@+id/layoutLogin"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_below="@id/ivLogo"
-            android:layout_marginBottom="16dp"
-            android:hint="@string/username"
-            android:inputType="textEmailAddress"
-            android:padding="10dp"
-            android:background="@drawable/edit_text_background"
-            android:elevation="4dp"
-            android:autofillHints="username" />
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+            <!-- Logo Image -->
+            <ImageView
+                android:id="@+id/ivLogo"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="32dp"
+                android:contentDescription="@string/twitter_logo"
+                android:scaleType="centerInside"
+                android:src="@drawable/title" />
 
-        <!-- Password EditText -->
-        <EditText
-            android:id="@+id/etPassword"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_below="@id/etUsername"
-            android:layout_marginBottom="16dp"
-            android:hint="@string/password"
-            android:inputType="textPassword"
-            android:padding="10dp"
-            android:background="@drawable/edit_text_background"
-            android:elevation="4dp"
-            android:autofillHints="password" />
+            <!-- Email TextInputLayout -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp">
 
-        <!-- Login Button -->
-        <Button
-            android:id="@+id/btnLogin"
-            android:onClick="onLogin"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_below="@id/etPassword"
-            android:layout_marginBottom="16dp"
-            android:text="@string/login"
-            android:background="@drawable/button_background"
-            android:textColor="@android:color/white"
-            android:padding="10dp"
-            android:elevation="4dp" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/email"
+                    android:inputType="textEmailAddress" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Sign Up TextView -->
-        <TextView
-            android:id="@+id/tvSignUp"
-            android:onClick="goToSignUp"
+            <!-- Password TextInputLayout -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/password"
+                    android:inputType="textPassword" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Login Button -->
+            <Button
+                android:id="@+id/btnLogin"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/button_background"
+                android:onClick="onLogin"
+                android:elevation="4dp"
+                android:padding="10dp"
+                android:text="@string/login"
+                android:textColor="@android:color/white" />
+
+            <!-- Sign Up TextView -->
+            <TextView
+                android:id="@+id/tvSignUp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="46dp"
+                android:elevation="4dp"
+                android:padding="10dp"
+                android:text="@string/sign_up"
+                android:textAllCaps="true"
+                android:textColor="@color/colorPrimary"
+                android:textSize="22sp" />
+        </LinearLayout>
+
+        <!-- Progress Bar -->
+        <ProgressBar
+            android:id="@+id/progressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/btnLogin"
-            android:layout_centerHorizontal="true"
-            android:text="@string/sign_up"
-            android:textColor="@color/colorPrimary"
-            android:layout_margin="46dp"
-            android:padding="10dp"
-            android:textAllCaps="true"
-            android:textSize="22sp"
-            android:elevation="4dp" />
-    </RelativeLayout>
+            android:layout_gravity="center"
+            android:visibility="gone" />
+    </LinearLayout>
 </ScrollView>
