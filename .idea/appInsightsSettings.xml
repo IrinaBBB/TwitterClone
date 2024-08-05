@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="ru.aurorahost.twitterclone" />
+                  <option name="mobileSdkAppId" value="1:291812575211:android:15651685a6a41fa325fbae" />
+                  <option name="projectId" value="twitterclone-83638" />
+                  <option name="projectNumber" value="291812575211" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
