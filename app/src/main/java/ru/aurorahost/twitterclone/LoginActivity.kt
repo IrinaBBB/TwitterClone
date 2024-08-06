@@ -80,17 +80,26 @@ class LoginActivity : AppCompatActivity() {
 
         if (proceed) {
             binding.progressBar.visibility = View.VISIBLE
-            firebaseAuth.signInWithEmailAndPassword(binding.etEmail.text.toString().trim(), binding.etPassword.text.toString().trim())
+            binding.group.visibility = View.INVISIBLE
+            firebaseAuth.signInWithEmailAndPassword(
+                binding.etEmail.text.toString().trim(),
+                binding.etPassword.text.toString().trim()
+            )
                 .addOnCompleteListener { task ->
                     if (!task.isSuccessful) {
                         binding.progressBar.visibility = View.GONE
-                        Toast.makeText(this, "Login error: ${task.exception?.localizedMessage}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this,
+                            "Login error: ${task.exception?.localizedMessage}",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
-                .addOnFailureListener {e ->
+                .addOnFailureListener { e ->
                     e.printStackTrace()
-                    binding.progressBar.visibility = View.GONE
                 }
+            binding.progressBar.visibility = View.GONE
+            binding.group.visibility = View.VISIBLE
         }
     }
 

@@ -9,11 +9,20 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import ru.aurorahost.twitterclone.databinding.ActivityHomeBinding
+import ru.aurorahost.twitterclone.util.User
 
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHomeBinding
+
+    private val firebaseAuth = FirebaseAuth.getInstance()
+    private var userId = FirebaseAuth.getInstance().currentUser?.uid
+    private var user: User? = null
+
+    private val firebaseDB = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +42,16 @@ class HomeActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        super.onResume()
+        userId = FirebaseAuth.getInstance().currentUser?.uid
+        if(userId == null) {
+            startActivity(LoginActivity.newIntent(this))
+            finish()
+        }
     }
 
     companion object {
