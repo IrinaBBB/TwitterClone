@@ -19,16 +19,23 @@ class LoginActivity : AppCompatActivity() {
 
     private var firebaseAuth = FirebaseAuth.getInstance()
 
-    private val firebaseAuthListener = FirebaseAuth.AuthStateListener {
-        val user = firebaseAuth.currentUser?.uid
-        user?.let {
-            startActivity(HomeActivity.newIntent(this@LoginActivity))
-            //finish()
+    private lateinit var firebaseAuthListener: FirebaseAuth.AuthStateListener
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        firebaseAuthListener = FirebaseAuth.AuthStateListener {
+            val user = firebaseAuth.currentUser?.uid
+            user?.let {
+                startActivity(HomeActivity.newIntent(this@LoginActivity))
+                finish()
+            }
+            setTextOnChangeListener(binding.etEmail, binding.tilEmail)
+            setTextOnChangeListener(binding.etPassword, binding.tilPassword)
+
+            //binding.progressBar.setOnTouchListener { v, event ->  true}
         }
-        setTextOnChangeListener(binding.etEmail, binding.tilEmail)
-        setTextOnChangeListener(binding.etPassword, binding.tilPassword)
-        
-        //binding.progressBar.setOnTouchListener { v, event ->  true}
     }
 
     private fun setTextOnChangeListener(et: EditText, til: TextInputLayout) {
@@ -44,11 +51,7 @@ class LoginActivity : AppCompatActivity() {
             }
         })
     }
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityLoginBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-    }
+
 
     override fun onStart() {
         super.onStart()
@@ -57,7 +60,7 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
-        firebaseAuth.addAuthStateListener(firebaseAuthListener)
+        firebaseAuth.removeAuthStateListener(firebaseAuthListener)
     }
 
 
