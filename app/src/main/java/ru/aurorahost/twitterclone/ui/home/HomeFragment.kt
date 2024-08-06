@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import ru.aurorahost.twitterclone.LoginActivity
+import ru.aurorahost.twitterclone.ProfileActivity
 import ru.aurorahost.twitterclone.R
 import ru.aurorahost.twitterclone.databinding.FragmentHomeBinding
 
@@ -59,7 +60,7 @@ class HomeFragment : Fragment() {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
                     R.id.menuProfile -> {
-                        // Handle the profile menu action
+                        startActivity(ProfileActivity.newIntent(requireContext()))
                         true
                     }
                     R.id.menuLogoutAction -> {

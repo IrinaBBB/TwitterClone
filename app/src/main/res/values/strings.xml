@@ -16,4 +16,6 @@
     <string name="title_list">List</string>
     <string name="profile">Profile</string>
     <string name="search_title">Search</string>
+    <string name="profile_picture">Profile picture</string>
+    <string name="apply">Apply</string>
 </resources>

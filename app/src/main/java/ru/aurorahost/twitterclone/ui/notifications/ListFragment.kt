@@ -63,9 +63,9 @@ class ListFragment : Fragment() {
 
                     override fun onQueryTextChange(newText: String?): Boolean {
                         // Handle search query text change
-                        newText?.let {
-                            performSearch(it)
-                        }
+//                        newText?.let {
+//                            performSearch(it)
+//                        }
                         return false
                     }
                 })

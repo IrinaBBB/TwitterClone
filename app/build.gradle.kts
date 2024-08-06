@@ -60,6 +60,12 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
     implementation("com.google.firebase:firebase-storage:21.0.0")
 
+    // Circular ImageView
+    implementation("com.mikhaellopez:circularimageview:3.0.2")
+
+    // Image Picker
+    implementation("com.github.dhaval2404:imagepicker:2.1")
+
     // Glide
     implementation("com.github.bumptech.glide:glide:4.16.0")
 }
