@@ -2,12 +2,18 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.TwitterClone" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-         <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorPrimary</item>
     </style>
+
     <style name="Base.Theme.TwitterClone.ActionBar" parent="Theme.Material3.DayNight">
         <!-- Customize your light theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryVariant">@color/colorPrimary</item>
+        <item name="colorSecondary">@color/colorPrimary</item>
+        <item name="colorSecondaryContainer">@color/colorPrimary</item>
+        <item name="colorPrimaryContainer">@color/colorPrimary</item>
+        <item name="colorSecondaryVariant">@color/colorPrimary</item>
         <item name="actionBarStyle">@style/ActionBar.TwitterClone</item>
     </style>
     <style name="ActionBar.TwitterClone" parent="Widget.MaterialComponents.ActionBar.Solid">
@@ -15,5 +21,6 @@
         <item name="titleTextColor">@color/white</item>
         <item name="subtitleTextColor">@color/white</item>
     </style>
+
     <style name="Theme.TwitterClone" parent="Base.Theme.TwitterClone" />
 </resources>
