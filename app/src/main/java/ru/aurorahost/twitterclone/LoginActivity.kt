@@ -23,7 +23,7 @@ class LoginActivity : AppCompatActivity() {
         val user = firebaseAuth.currentUser?.uid
         user?.let {
             startActivity(HomeActivity.newIntent(this@LoginActivity))
-            finish()
+            //finish()
         }
         setTextOnChangeListener(binding.etEmail, binding.tilEmail)
         setTextOnChangeListener(binding.etPassword, binding.tilPassword)

@@ -16,6 +16,7 @@
             android:name=".HomeActivity"
             android:exported="false"
             android:label="@string/title_activity_home"
+            android:screenOrientation="portrait"
             android:theme="@style/Base.Theme.TwitterClone.ActionBar" />
         <activity
             android:name=".SignupActivity"
