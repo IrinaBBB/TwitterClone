@@ -104,8 +104,6 @@ class SignupActivity : AppCompatActivity() {
         firebaseAuth.addAuthStateListener(firebaseAuthListener)
     }
 
-
-
     private fun setTextOnChangeListener(et: EditText, til: TextInputLayout) {
         et.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {

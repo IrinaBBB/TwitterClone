@@ -8,17 +8,36 @@
     android:padding="16dp">
 
     <!-- Tweet Text Input Field -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:backgroundTint="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:constraint_referenced_ids="tilTweetText,ivImage,fabSaveTweet,fabUploadImage" />
+
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayoutTweet"
+        android:id="@+id/tilTweetText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:hint="What's happening?">
+        android:hint="@string/what_s_happening">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editTextTweet"
+            android:id="@+id/etTweetText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textMultiLine"
@@ -28,41 +47,43 @@
 
     <!-- ImageView for Tweet Picture -->
     <ImageView
-        android:id="@+id/imageViewTweet"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
+        android:id="@+id/ivImage"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/pictures"
-        android:contentDescription="Tweet image"
-        android:scaleType="fitEnd"
+        android:contentDescription="@string/tweet_image"
+        android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutTweet" />
+        app:layout_constraintTop_toBottomOf="@+id/tilTweetText" />
 
     <!-- Upload Image FAB -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabUploadImage"
+        android:onClick="pickImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:src="@drawable/ic_camera"
         app:tint="@android:color/white"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewTweet"
+        app:layout_constraintTop_toBottomOf="@+id/ivImage"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/fabSaveTweet"
-        android:contentDescription="Upload Image" />
+        android:contentDescription="@string/upload_image" />
 
     <!-- Save Tweet FAB -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabSaveTweet"
+        android:onClick="postTweet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:src="@drawable/send"
         app:tint="@android:color/white"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewTweet"
+        app:layout_constraintTop_toBottomOf="@+id/ivImage"
         app:layout_constraintStart_toEndOf="@+id/fabUploadImage"
         app:layout_constraintEnd_toEndOf="parent"
-        android:contentDescription="Save Tweet" />
+        android:contentDescription="@string/save_tweet" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

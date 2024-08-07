@@ -21,7 +21,6 @@ class HomeActivity : AppCompatActivity() {
 
     private val firebaseAuth = FirebaseAuth.getInstance()
     private var userId = FirebaseAuth.getInstance().currentUser?.uid
-    private var user: User? = null
 
     private val firebaseDB = FirebaseFirestore.getInstance()
 
@@ -42,10 +41,13 @@ class HomeActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        binding.floatingActionButton.setOnClickListener {
+            startActivity(TweetActivity.newIntent(this, userId))
+        }
     }
 
     override fun onResume() {
-        super.onResume()
         super.onResume()
         userId = FirebaseAuth.getInstance().currentUser?.uid
         if(userId == null) {
@@ -54,9 +56,7 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    fun goToTweetActivity(v: View) {
-        startActivity(TweetActivity.newIntent(this))
-    }
+
 
     companion object {
         fun newIntent(context: Context) = Intent(context, HomeActivity::class.java)

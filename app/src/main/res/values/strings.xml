@@ -18,4 +18,9 @@
     <string name="search_title">Search</string>
     <string name="profile_picture">Profile picture</string>
     <string name="apply">Apply</string>
+    <string name="upload_image">Upload Image</string>
+    <string name="save_tweet">Save Tweet</string>
+    <string name="tweet_image">Tweet image</string>
+    <string name="what_s_happening">What\'s happening?</string>
+    <string name="create_a_new_tweet">Create a new tweet</string>
 </resources>

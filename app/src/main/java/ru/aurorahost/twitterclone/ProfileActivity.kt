@@ -88,6 +88,7 @@ class ProfileActivity : AppCompatActivity() {
                 } else {
                     Toast.makeText(this@ProfileActivity, "User not found", Toast.LENGTH_SHORT)
                         .show()
+                    finish()
                 }
                 binding.progressBar.visibility = View.GONE
                 binding.group.visibility = View.VISIBLE

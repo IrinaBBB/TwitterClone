@@ -34,13 +34,14 @@
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton"
         android:layout_width="wrap_content"
-        android:onClick="goToTweetActivity"
         android:layout_height="wrap_content"
         android:layout_marginEnd="28dp"
         android:layout_marginBottom="28dp"
         android:clickable="true"
         app:layout_constraintBottom_toTopOf="@+id/nav_view"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/feather" />
+        app:srcCompat="@drawable/feather"
+        android:focusable="true"
+        android:contentDescription="@string/create_a_new_tweet" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
