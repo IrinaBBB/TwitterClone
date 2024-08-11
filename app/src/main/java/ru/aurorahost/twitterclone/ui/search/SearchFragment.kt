@@ -8,6 +8,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuHost
@@ -32,6 +33,7 @@ import ru.aurorahost.twitterclone.databinding.FragmentSearchBinding
 import ru.aurorahost.twitterclone.listeners.TweetListener
 import ru.aurorahost.twitterclone.util.DATA_PROFILE_IMAGES
 import ru.aurorahost.twitterclone.util.DATA_TWEETS
+import ru.aurorahost.twitterclone.util.DATA_USERS
 import ru.aurorahost.twitterclone.util.Tweet
 import ru.aurorahost.twitterclone.util.User
 
@@ -47,9 +49,9 @@ class SearchFragment : Fragment() {
 
     /** DB */
     private lateinit var databaseReference: DatabaseReference
-    private lateinit var storageReference: StorageReference
 
     private var currentHashtag = ""
+    private var hashtagFollowed = false
     private var tweetsAdapter: TweetListAdapter? = null
     private var listener: TweetListener? = null
     private var currentUser: User? = null
@@ -69,13 +71,82 @@ class SearchFragment : Fragment() {
         userId = FirebaseAuth.getInstance().currentUser?.uid
 
         databaseReference = FirebaseDatabase.getInstance().reference
-        storageReference = FirebaseStorage.getInstance().reference.child(DATA_PROFILE_IMAGES)
+
+
+
 
         return root
     }
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        tweetsAdapter = TweetListAdapter(userId!!, arrayListOf())
+        tweetsAdapter?.setListener(listener)
+        binding.recyclerView.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = tweetsAdapter
+            //addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+        }
+        databaseReference.child(DATA_USERS).child(userId!!).get().addOnSuccessListener { snapshot ->
+            currentUser = snapshot.getValue(User::class.java)
+//            hashtagFollowed = currentUser?.followHashtags?.contains(currentHashtag) == true
+//
+//            if (hashtagFollowed) {
+//                binding.followHashtag.setImageResource(R.drawable.follow) // Example active state
+//            } else {
+//                binding.followHashtag.setImageResource(R.drawable.follow_inactive) // Example inactive state
+//            }
+        }
+        binding.followHashtag.setOnClickListener {
+            binding.followHashtag.isClickable = false
+            if (hashtagFollowed) {
+                val followed = currentUser?.followHashtags ?: arrayListOf()
+                if (followed.contains(currentHashtag)) {
+                    followed.remove(currentHashtag)
+                    currentUser?.followHashtags = followed
+
+                    // Update the user in the database
+                    databaseReference.child(DATA_USERS).child(userId!!).setValue(currentUser)
+                        .addOnCompleteListener { task ->
+                            binding.followHashtag.isClickable = true
+                            if (task.isSuccessful) {
+                                // Successfully updated
+                                hashtagFollowed = false
+                                binding.followHashtag.setImageResource(R.drawable.follow_inactive)
+                            } else {
+                                Toast.makeText(requireContext(), "Error! Could not unfollow tag", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                } else {
+                    binding.followHashtag.isClickable = true
+                }
+            } else {
+                // Follow logic
+                val followed = currentUser?.followHashtags ?: arrayListOf()
+                if (!followed.contains(currentHashtag)) {
+                    followed.add(currentHashtag)
+                    currentUser?.followHashtags = followed
+
+                    // Update the user in the database
+                    databaseReference.child(DATA_USERS).child(userId!!).setValue(currentUser)
+                        .addOnCompleteListener { task ->
+                            binding.followHashtag.isClickable = true
+                            if (task.isSuccessful) {
+                                // Successfully updated
+                                hashtagFollowed = true
+                                binding.followHashtag.setImageResource(R.drawable.follow)
+                            } else {
+                                // Handle the error
+                                Toast.makeText(requireContext(), "Error! Could not follow tag", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                } else {
+                    binding.followHashtag.isClickable = true
+                }
+            }
+        }
+
     }
     private fun setupMenu() {
         val menuHost: MenuHost = requireActivity()
@@ -112,18 +183,6 @@ class SearchFragment : Fragment() {
         findTweetsByTag(query)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        tweetsAdapter = TweetListAdapter(userId!!, arrayListOf())
-        tweetsAdapter?.setListener(listener)
-        binding.recyclerView.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = tweetsAdapter
-            //addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-        }
-    }
-
     private fun findTweetsByTag(tag: String) {
         // Hide the RecyclerView initially
         binding.recyclerView.visibility = View.GONE
@@ -151,7 +210,14 @@ class SearchFragment : Fragment() {
                 // Update RecyclerView with the filtered list
                 tweetsAdapter?.updateTweets(sortedTweetList)
 
-
+                databaseReference.child(DATA_USERS).child(userId!!).get().addOnSuccessListener { snapshot ->
+                    hashtagFollowed = currentUser?.followHashtags?.contains(currentHashtag) == true
+                    if (hashtagFollowed) {
+                        binding.followHashtag.setImageResource(R.drawable.follow) // Example active state
+                    } else {
+                        binding.followHashtag.setImageResource(R.drawable.follow_inactive) // Example inactive state
+                    }
+                }
                 // Show the RecyclerView now that data is loaded
                 binding.recyclerView.visibility = View.VISIBLE
             }
@@ -162,6 +228,8 @@ class SearchFragment : Fragment() {
             }
         })
     }
-
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

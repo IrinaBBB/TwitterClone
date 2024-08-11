@@ -16,9 +16,8 @@
         android:background="@drawable/bg_circle_star"
         android:contentDescription="@string/star"
         android:visibility="gone"
-        android:elevation="1dp"
+        android:elevation="16dp"
         android:scaleType="centerInside"
-        android:src="@drawable/follow_inactive"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/recyclerView" />
 
