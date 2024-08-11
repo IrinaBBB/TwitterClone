@@ -13,9 +13,11 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import com.google.firebase.auth.FirebaseAuth
 import ru.aurorahost.twitterclone.LoginActivity
 import ru.aurorahost.twitterclone.ProfileActivity
 import ru.aurorahost.twitterclone.R
+import ru.aurorahost.twitterclone.TweetActivity
 import ru.aurorahost.twitterclone.databinding.FragmentHomeBinding
 
 
@@ -24,6 +26,8 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private lateinit var homeViewModel: HomeViewModel
+
+    private var userId = FirebaseAuth.getInstance().currentUser?.uid
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,7 +44,9 @@ class HomeFragment : Fragment() {
         }
 
         setupMenu()
-
+        binding.floatingActionButton.setOnClickListener {
+            startActivity(TweetActivity.newIntent(requireContext(), userId))
+        }
         return root
     }
 

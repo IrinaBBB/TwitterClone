@@ -5,8 +5,6 @@ const val DATA_USER_USERNAME = "username"
 const val DATA_IMAGE_URL = "imageUrl"
 const val DATA_USER_HASHTAGS = "followHashtags"
 
-
-
 /** Collections Names */
 const val DATA_USERS = "Users"
 const val DATA_PROFILE_IMAGES = "ProfileImages"

@@ -3,7 +3,6 @@ package ru.aurorahost.twitterclone
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -13,7 +12,6 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import ru.aurorahost.twitterclone.databinding.ActivityHomeBinding
-import ru.aurorahost.twitterclone.util.User
 
 class HomeActivity : AppCompatActivity() {
 
@@ -36,17 +34,13 @@ class HomeActivity : AppCompatActivity() {
 
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_home, R.id.navigation_search, R.id.navigation_list
+                R.id.navigation_home, R.id.navigation_search, R.id.navigation_feed
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        binding.floatingActionButton.setOnClickListener {
-            startActivity(TweetActivity.newIntent(this, userId))
-        }
     }
-
     override fun onResume() {
         super.onResume()
         userId = FirebaseAuth.getInstance().currentUser?.uid
@@ -55,11 +49,8 @@ class HomeActivity : AppCompatActivity() {
             finish()
         }
     }
-
-
-
     companion object {
         fun newIntent(context: Context) = Intent(context, HomeActivity::class.java)
-    }
 
+    }
 }

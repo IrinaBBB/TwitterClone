@@ -1,17 +1,39 @@
 package ru.aurorahost.twitterclone.ui.search
 
 import android.os.Bundle
-import android.view.*
-import android.widget.TextView
-import android.widget.Toast
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView.LayoutManager
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import ru.aurorahost.twitterclone.R
+import ru.aurorahost.twitterclone.adapters.TweetListAdapter
 import ru.aurorahost.twitterclone.databinding.FragmentSearchBinding
+import ru.aurorahost.twitterclone.listeners.TweetListener
+import ru.aurorahost.twitterclone.util.DATA_PROFILE_IMAGES
+import ru.aurorahost.twitterclone.util.DATA_TWEETS
+import ru.aurorahost.twitterclone.util.Tweet
+import ru.aurorahost.twitterclone.util.User
 
 class SearchFragment : Fragment() {
 
@@ -19,34 +41,44 @@ class SearchFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var searchViewModel: SearchViewModel
 
+    /** Auth */
+    private lateinit var firebaseAuth: FirebaseAuth
+    private var userId: String? = null
+
+    /** DB */
+    private lateinit var databaseReference: DatabaseReference
+    private lateinit var storageReference: StorageReference
+
+    private var currentHashtag = ""
+    private var tweetsAdapter: TweetListAdapter? = null
+    private var listener: TweetListener? = null
+    private var currentUser: User? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        searchViewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
-
+        searchViewModel = ViewModelProvider(this)[SearchViewModel::class.java]
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textSearch
-        searchViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
-
         setupMenu()
+
+        firebaseAuth = FirebaseAuth.getInstance()
+        userId = FirebaseAuth.getInstance().currentUser?.uid
+
+        databaseReference = FirebaseDatabase.getInstance().reference
+        storageReference = FirebaseStorage.getInstance().reference.child(DATA_PROFILE_IMAGES)
 
         return root
     }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
     private fun setupMenu() {
         val menuHost: MenuHost = requireActivity()
-
         menuHost.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.search_menu, menu)
@@ -63,10 +95,6 @@ class SearchFragment : Fragment() {
                     }
 
                     override fun onQueryTextChange(newText: String?): Boolean {
-                        // Handle search query text change
-//                        newText?.let {
-//                            performSearch(it)
-//                        }
                         return false
                     }
                 })
@@ -78,10 +106,62 @@ class SearchFragment : Fragment() {
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
-
     private fun performSearch(query: String) {
-        // Perform the search operation and update the UI
-        // For demonstration, we'll just update the ViewModel with the search query
-        Toast.makeText(requireContext(), "Hello from search: $query", Toast.LENGTH_SHORT).show()
+        currentHashtag = query
+        binding.followHashtag.visibility = View.VISIBLE
+        findTweetsByTag(query)
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        tweetsAdapter = TweetListAdapter(userId!!, arrayListOf())
+        tweetsAdapter?.setListener(listener)
+        binding.recyclerView.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = tweetsAdapter
+            //addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+        }
+    }
+
+    private fun findTweetsByTag(tag: String) {
+        // Hide the RecyclerView initially
+        binding.recyclerView.visibility = View.GONE
+
+        // Query the database for tweets that might contain the specified hashtag
+        val query = databaseReference.child(DATA_TWEETS)
+
+        // Attach a listener to get the data
+        query.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val tweetList = mutableListOf<Tweet>() // Initialize an empty list for Tweet objects
+
+                // Iterate through all tweets and check if they contain the hashtag
+                for (snapshot in dataSnapshot.children) {
+                    val tweet = snapshot.getValue(Tweet::class.java)
+                    tweet?.let {
+                        if (it.hashtags?.contains(tag) == true) {
+                            tweetList.add(it)
+                        }
+                    }
+                }
+
+                val sortedTweetList = tweetList.sortedByDescending { it.timeStamp }
+
+                // Update RecyclerView with the filtered list
+                tweetsAdapter?.updateTweets(sortedTweetList)
+
+
+                // Show the RecyclerView now that data is loaded
+                binding.recyclerView.visibility = View.VISIBLE
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Handle potential errors here
+                Log.e("Firebase", "Error loading tweets: ${databaseError.message}")
+            }
+        })
+    }
+
+
 }

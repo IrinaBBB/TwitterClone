@@ -23,4 +23,6 @@
     <string name="tweet_image">Tweet image</string>
     <string name="what_s_happening">What\'s happening?</string>
     <string name="create_a_new_tweet">Create a new tweet</string>
+    <string name="star">star</string>
+    <string name="title_news_feed">News Feed</string>
 </resources>

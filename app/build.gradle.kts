@@ -68,4 +68,7 @@ dependencies {
 
     // Glide
     implementation("com.github.bumptech.glide:glide:4.16.0")
+
+    // Swipe Layout
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 }
