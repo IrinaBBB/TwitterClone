@@ -16,9 +16,7 @@ import ru.aurorahost.twitterclone.databinding.ActivityLoginBinding
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
-
     private var firebaseAuth = FirebaseAuth.getInstance()
-
     private lateinit var firebaseAuthListener: FirebaseAuth.AuthStateListener
 
     override fun onCreate(savedInstanceState: Bundle?) {

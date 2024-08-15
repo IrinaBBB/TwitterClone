@@ -1,4 +1,4 @@
-package ru.aurorahost.twitterclone.ui.notifications
+package ru.aurorahost.twitterclone.ui.list
 
 import android.os.Bundle
 import android.view.*
@@ -10,14 +10,30 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.FirebaseFirestore
 import ru.aurorahost.twitterclone.R
+import ru.aurorahost.twitterclone.adapters.TweetListAdapter
 import ru.aurorahost.twitterclone.databinding.FragmentListBinding
+import ru.aurorahost.twitterclone.listeners.HomeCallback
+import ru.aurorahost.twitterclone.listeners.TweetListener
+import ru.aurorahost.twitterclone.util.User
 
 class ListFragment : Fragment() {
 
     private var _binding: FragmentListBinding? = null
     private val binding get() = _binding!!
     private lateinit var listViewModel: ListViewModel
+
+    private var tweetsAdapter: TweetListAdapter? = null
+    private var currentUser: User? = null
+    private val firebaseDb = FirebaseDatabase.getInstance().reference
+    private val userId = FirebaseAuth.getInstance().currentUser?.uid
+    private val listener: TweetListener? = null
+    private var callback: HomeCallback? = null
+    private var tweetListener: HomeCallback? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,10 +44,7 @@ class ListFragment : Fragment() {
         _binding = FragmentListBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textNotifications
-        listViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
+
 
         setupMenu()
 

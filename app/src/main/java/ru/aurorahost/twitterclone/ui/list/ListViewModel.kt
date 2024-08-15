@@ -1,4 +1,4 @@
-package ru.aurorahost.twitterclone.ui.notifications
+package ru.aurorahost.twitterclone.ui.list
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

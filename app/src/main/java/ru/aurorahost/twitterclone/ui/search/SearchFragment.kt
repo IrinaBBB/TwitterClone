@@ -61,6 +61,7 @@ class SearchFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
         searchViewModel = ViewModelProvider(this)[SearchViewModel::class.java]
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -71,10 +72,6 @@ class SearchFragment : Fragment() {
         userId = FirebaseAuth.getInstance().currentUser?.uid
 
         databaseReference = FirebaseDatabase.getInstance().reference
-
-
-
-
         return root
     }
 
@@ -90,13 +87,6 @@ class SearchFragment : Fragment() {
         }
         databaseReference.child(DATA_USERS).child(userId!!).get().addOnSuccessListener { snapshot ->
             currentUser = snapshot.getValue(User::class.java)
-//            hashtagFollowed = currentUser?.followHashtags?.contains(currentHashtag) == true
-//
-//            if (hashtagFollowed) {
-//                binding.followHashtag.setImageResource(R.drawable.follow) // Example active state
-//            } else {
-//                binding.followHashtag.setImageResource(R.drawable.follow_inactive) // Example inactive state
-//            }
         }
         binding.followHashtag.setOnClickListener {
             binding.followHashtag.isClickable = false
@@ -182,7 +172,6 @@ class SearchFragment : Fragment() {
         binding.followHashtag.visibility = View.VISIBLE
         findTweetsByTag(query)
     }
-
     private fun findTweetsByTag(tag: String) {
         // Hide the RecyclerView initially
         binding.recyclerView.visibility = View.GONE

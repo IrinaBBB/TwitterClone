@@ -3,6 +3,7 @@ package ru.aurorahost.twitterclone
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -12,6 +13,8 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import ru.aurorahost.twitterclone.databinding.ActivityHomeBinding
+import ru.aurorahost.twitterclone.listeners.HomeCallback
+import ru.aurorahost.twitterclone.ui.home.HomeFragment
 
 class HomeActivity : AppCompatActivity() {
 
