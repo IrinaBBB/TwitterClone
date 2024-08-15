@@ -48,46 +48,25 @@ class HomeFragment : Fragment() {
     private var listener: TwitterListenerImpl? = null
     private val userId = FirebaseAuth.getInstance().currentUser?.uid
     private var tweetsAdapter: TweetListAdapter? = null
-    private var callback: HomeCallback? = null
 
-    private fun updateList(currentUser: User?) {
-        binding.recyclerView.visibility = View.GONE
 
-        firebaseReference.child(DATA_TWEETS).addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val tweets = mutableListOf<Tweet>()
-                for (tweetSnapshot in dataSnapshot.children) {
-                    val tweet = tweetSnapshot.getValue(Tweet::class.java) ?: continue
-                    if (currentUser?.followHashtags?.any { tweet.hashtags?.contains(it) ?: false } == true ||
-                        currentUser?.followUsers?.contains(tweet.userIds!![0]) == true) {
-                        tweets.add(tweet)
-                    }
-                }
-                updateAdapter(tweets)
-                binding.recyclerView.visibility = View.VISIBLE
-            }
 
-            override fun onCancelled(databaseError: DatabaseError) {
-                Log.e("DatabaseError", "Error fetching tweets: ", databaseError.toException())
-                binding.recyclerView.visibility = View.VISIBLE
-            }
-        })
-    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         mainViewModel.getCurrentUser()
         mainViewModel.user.observe(viewLifecycleOwner) { user ->
-            listener = TwitterListenerImpl(binding.recyclerView, user)
-            tweetsAdapter = TweetListAdapter(userId!!, arrayListOf())
-            tweetsAdapter?.setListener(listener)
-            binding.recyclerView.apply {
-                layoutManager = LinearLayoutManager(context)
-                adapter = tweetsAdapter
+            homeViewModel.tweets.observe(viewLifecycleOwner)  {it
+                listener = TwitterListenerImpl(binding.recyclerView, user)
+                tweetsAdapter = TweetListAdapter(userId!!, it!!)
+                tweetsAdapter?.setListener(listener)
+                binding.recyclerView.apply {
+                    layoutManager = LinearLayoutManager(context)
+                    adapter = tweetsAdapter
+                }
             }
         }
     }
-
 
     private fun updateAdapter(tweets: List<Tweet>) {
         val sortedTweets = tweets.sortedWith(compareByDescending { it.timeStamp })
@@ -148,7 +127,7 @@ class HomeFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         mainViewModel.user.observe(viewLifecycleOwner) { user ->
-            updateList(user)
+            homeViewModel.updateList(user, binding.recyclerView, binding.progressBar)
         }
     }
 }
