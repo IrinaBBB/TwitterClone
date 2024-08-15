@@ -2,6 +2,7 @@ package ru.aurorahost.twitterclone.listeners
 
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -16,6 +17,7 @@ import ru.aurorahost.twitterclone.util.User
 class TwitterListenerImpl(
     val tweetList: RecyclerView,
     var user: User?,
+    val changeTrigger: MutableLiveData<Boolean>
 ) : TweetListener {
 
     private val firebaseDb = FirebaseDatabase.getInstance().reference
@@ -89,6 +91,7 @@ class TwitterListenerImpl(
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         tweetList.isClickable = true
+                        changeTrigger.value = !changeTrigger.value!!
                     } else {
                         Toast.makeText(tweetList.context, "Error", Toast.LENGTH_SHORT).show()
                         tweetList.isClickable = true
@@ -111,6 +114,7 @@ class TwitterListenerImpl(
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         tweetList.isClickable = true
+                        changeTrigger.value = !changeTrigger.value!!
                     } else {
                         Toast.makeText(tweetList.context, "Error", Toast.LENGTH_SHORT).show()
                         tweetList.isClickable = true

@@ -16,13 +16,18 @@ import ru.aurorahost.twitterclone.util.DATA_TWEETS
 import ru.aurorahost.twitterclone.util.Tweet
 import ru.aurorahost.twitterclone.util.User
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel() : ViewModel() {
 
     private var firebaseAuth = FirebaseAuth.getInstance()
     private val firebaseReference = FirebaseDatabase.getInstance().reference
 
     private val _tweets = MutableLiveData<ArrayList<Tweet>?>()
     val tweets: LiveData<ArrayList<Tweet>?> get() = _tweets
+    val changeTrigger = MutableLiveData<Boolean>()
+
+    init {
+        changeTrigger.value = false
+    }
 
     fun updateList(currentUser: User?, recyclerView: RecyclerView, progressBar: ProgressBar) {
         recyclerView.visibility = View.GONE

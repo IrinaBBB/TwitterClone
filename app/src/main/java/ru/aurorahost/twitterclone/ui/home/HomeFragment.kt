@@ -12,6 +12,7 @@ import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -50,21 +51,31 @@ class HomeFragment : Fragment() {
     private var tweetsAdapter: TweetListAdapter? = null
 
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         mainViewModel.getCurrentUser()
         mainViewModel.user.observe(viewLifecycleOwner) { user ->
-            homeViewModel.tweets.observe(viewLifecycleOwner)  {it
-                listener = TwitterListenerImpl(binding.recyclerView, user)
-                tweetsAdapter = TweetListAdapter(userId!!, it!!)
-                tweetsAdapter?.setListener(listener)
-                binding.recyclerView.apply {
-                    layoutManager = LinearLayoutManager(context)
-                    adapter = tweetsAdapter
-                }
+            homeViewModel.tweets.observe(viewLifecycleOwner) {
+                setupRecyclerView(user!!, it!!)
             }
+        }
+
+        homeViewModel.changeTrigger.observe(viewLifecycleOwner) {
+            mainViewModel.user.observe(viewLifecycleOwner) { user ->
+                homeViewModel.updateList(user, binding.recyclerView, binding.progressBar)
+            }
+        }
+
+    }
+
+    private fun setupRecyclerView(user: User, list: ArrayList<Tweet>) {
+        listener = TwitterListenerImpl(binding.recyclerView, user, homeViewModel.changeTrigger)
+        tweetsAdapter = TweetListAdapter(userId!!, list)
+        tweetsAdapter?.setListener(listener)
+        binding.recyclerView.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = tweetsAdapter
         }
     }
 
