@@ -16,7 +16,8 @@ import ru.aurorahost.twitterclone.listeners.TweetListener
 import ru.aurorahost.twitterclone.util.Tweet
 import ru.aurorahost.twitterclone.util.getDate
 
-class TweetListAdapter(val userId: String, private val tweets: ArrayList<Tweet>) : RecyclerView.Adapter<TweetListAdapter.TweetViewHolder>() {
+class TweetListAdapter(val userId: String, private val tweets: ArrayList<Tweet>) :
+    RecyclerView.Adapter<TweetListAdapter.TweetViewHolder>() {
 
     private var listener: TweetListener? = null
 
@@ -42,7 +43,7 @@ class TweetListAdapter(val userId: String, private val tweets: ArrayList<Tweet>)
         val tweet = tweets[position]
         holder.usernameTextView.text = tweet.username
         holder.tweetTextView.text = tweet.text
-        holder.dateTextView.text =  getDate(tweet.timeStamp)
+        holder.dateTextView.text = getDate(tweet.timeStamp)
         holder.likeCountTextView.text = tweet.likes?.size.toString()
         holder.retweetCountTextView.text = tweet.userIds?.size?.minus(1).toString()
 
@@ -68,18 +69,47 @@ class TweetListAdapter(val userId: String, private val tweets: ArrayList<Tweet>)
         }
 
         if (tweet.likes?.contains(userId) == true) {
-            holder.likeImageView.setImageDrawable(ContextCompat.getDrawable(holder.likeImageView.context, R.drawable.like))
+            holder.likeImageView.setImageDrawable(
+                ContextCompat.getDrawable(
+                    holder.likeImageView.context,
+                    R.drawable.like
+                )
+            )
         } else {
-            holder.likeImageView.setImageDrawable(ContextCompat.getDrawable(holder.likeImageView.context, R.drawable.like_inactive))
+            holder.likeImageView.setImageDrawable(
+                ContextCompat.getDrawable(
+                    holder.likeImageView.context,
+                    R.drawable.like_inactive
+                )
+            )
         }
 
-        if (tweet.userIds?.get(0).equals(userId)) {
-            holder.retweetImageView.setImageDrawable(ContextCompat.getDrawable(holder.retweetImageView.context, R.drawable.original))
-        } else if (tweet.userIds?.contains(userId) == true) {
-            holder.retweetImageView.setImageDrawable(ContextCompat.getDrawable(holder.retweetImageView.context, R.drawable.retweet))
-        } else {
-            holder.retweetImageView.setImageDrawable(ContextCompat.getDrawable(holder.retweetImageView.context, R.drawable.retweet_inactive))
+        if (tweet.userIds!!.isNotEmpty()) {
+            if (tweet.userIds?.get(0).equals(userId)) {
+                holder.retweetImageView.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        holder.retweetImageView.context,
+                        R.drawable.original
+                    )
+                )
+            } else if (tweet.userIds?.contains(userId) == true) {
+                holder.retweetImageView.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        holder.retweetImageView.context,
+                        R.drawable.retweet
+                    )
+                )
+            } else {
+                holder.retweetImageView.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        holder.retweetImageView.context,
+                        R.drawable.retweet_inactive
+                    )
+                )
+            }
         }
+
+
     }
 
     class TweetViewHolder(v: View) : RecyclerView.ViewHolder(v) {

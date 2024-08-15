@@ -17,6 +17,11 @@ class MainViewModel : ViewModel() {
     private val firebaseReference = FirebaseDatabase.getInstance().reference
     private val userId = FirebaseAuth.getInstance().currentUser?.uid
     private val _user = MutableLiveData<User?>()
+    val changeTrigger = MutableLiveData<Boolean>()
+
+    init {
+        changeTrigger.value = false
+    }
     val user: LiveData<User?> get() = _user
 
     fun getCurrentUser() {

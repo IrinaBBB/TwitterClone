@@ -23,11 +23,7 @@ class HomeViewModel() : ViewModel() {
 
     private val _tweets = MutableLiveData<ArrayList<Tweet>?>()
     val tweets: LiveData<ArrayList<Tweet>?> get() = _tweets
-    val changeTrigger = MutableLiveData<Boolean>()
 
-    init {
-        changeTrigger.value = false
-    }
 
     fun updateList(currentUser: User?, recyclerView: RecyclerView, progressBar: ProgressBar) {
         recyclerView.visibility = View.GONE

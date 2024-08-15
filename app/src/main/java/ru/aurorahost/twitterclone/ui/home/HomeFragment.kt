@@ -1,7 +1,6 @@
 package ru.aurorahost.twitterclone.ui.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -12,28 +11,18 @@ import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import ru.aurorahost.twitterclone.LoginActivity
 import ru.aurorahost.twitterclone.ProfileActivity
 import ru.aurorahost.twitterclone.R
 import ru.aurorahost.twitterclone.TweetActivity
 import ru.aurorahost.twitterclone.adapters.TweetListAdapter
 import ru.aurorahost.twitterclone.databinding.FragmentHomeBinding
-import ru.aurorahost.twitterclone.listeners.HomeCallback
 import ru.aurorahost.twitterclone.listeners.TwitterListenerImpl
 import ru.aurorahost.twitterclone.ui.MainViewModel
-import ru.aurorahost.twitterclone.ui.TwitterFragment
-import ru.aurorahost.twitterclone.util.DATA_TWEETS
-import ru.aurorahost.twitterclone.util.DATA_TWEETS_USER_HASHTAGS
-import ru.aurorahost.twitterclone.util.DATA_TWEETS_USER_IDS
 import ru.aurorahost.twitterclone.util.Tweet
 import ru.aurorahost.twitterclone.util.User
 
@@ -45,7 +34,6 @@ class HomeFragment : Fragment() {
     private lateinit var homeViewModel: HomeViewModel
 
     private val binding get() = _binding!!
-    private val firebaseReference = FirebaseDatabase.getInstance().reference
     private var listener: TwitterListenerImpl? = null
     private val userId = FirebaseAuth.getInstance().currentUser?.uid
     private var tweetsAdapter: TweetListAdapter? = null
@@ -61,7 +49,7 @@ class HomeFragment : Fragment() {
             }
         }
 
-        homeViewModel.changeTrigger.observe(viewLifecycleOwner) {
+        mainViewModel.changeTrigger.observe(viewLifecycleOwner) {
             mainViewModel.user.observe(viewLifecycleOwner) { user ->
                 homeViewModel.updateList(user, binding.recyclerView, binding.progressBar)
             }
@@ -70,7 +58,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupRecyclerView(user: User, list: ArrayList<Tweet>) {
-        listener = TwitterListenerImpl(binding.recyclerView, user, homeViewModel.changeTrigger)
+        listener = TwitterListenerImpl(binding.recyclerView, user, mainViewModel.changeTrigger)
         tweetsAdapter = TweetListAdapter(userId!!, list)
         tweetsAdapter?.setListener(listener)
         binding.recyclerView.apply {
@@ -78,13 +66,6 @@ class HomeFragment : Fragment() {
             adapter = tweetsAdapter
         }
     }
-
-    private fun updateAdapter(tweets: List<Tweet>) {
-        val sortedTweets = tweets.sortedWith(compareByDescending { it.timeStamp })
-        tweetsAdapter?.updateTweets(removeDuplicates(sortedTweets))
-    }
-
-    private fun removeDuplicates(originalList: List<Tweet>) = originalList.distinctBy { it.tweetId }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

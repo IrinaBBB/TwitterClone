@@ -25,6 +25,8 @@ class HomeActivity : AppCompatActivity() {
 
     private val firebaseDB = FirebaseFirestore.getInstance()
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
